@@ -39,11 +39,11 @@ export default class NotificationMessage {
 
         NotificationMessage.lastShownElement = this
 
-        let timer = setTimeout(() => this.destroy(), this.duration)
+        this.timerId = setTimeout(() => this.destroy(), this.duration)
     }
 
     destroy() {
-        clearTimeout(this.timer)
+        clearTimeout(this.timerId)
         this.remove()
     }
 
