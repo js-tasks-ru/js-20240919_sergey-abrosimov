@@ -6,7 +6,7 @@ export default class ColumnChart {
         this.label = obj?.label
         this.value = obj?.hasOwnProperty('formatHeading') ? obj.formatHeading(obj.value) : obj?.value
         this.link = obj?.link 
-        this.element = this.setElement()
+        this.element = this.createElement()
     }
 
     setLink() {
@@ -16,7 +16,7 @@ export default class ColumnChart {
         return ''
     }
 
-    setElement() {
+    createElement() {
         const currentElement = document.createElement('div')
         currentElement.innerHTML = `
         <div class="column-chart" style="--chart-height: ${this.chartHeight}">
@@ -56,7 +56,7 @@ export default class ColumnChart {
 
     update(data) {
         this.data = data
-        this.element.innerHTML = this.setElement()
+        this.element.innerHTML = this.createElement()
     }
 
     remove() {
