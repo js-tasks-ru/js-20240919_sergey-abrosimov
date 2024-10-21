@@ -6,9 +6,11 @@ export default class SortableTable extends SortableTableV1{
   } = {}) {
     super(headersConfig, data)
     const { 
-      id, 
+      id = headersConfig.find(item => item.sortable).id, 
       order = 'asc'
     } = sorted
+    this.id = id;
+    this.order = order
     this.arrowElement = this.createArrowElement()
     this.isSortLocally = true
     
@@ -17,7 +19,6 @@ export default class SortableTable extends SortableTableV1{
     if (id) {
       this.defaultSorting(id, order)
     }
-
   }
 
   defaultSorting(id, order) {
@@ -71,7 +72,7 @@ export default class SortableTable extends SortableTableV1{
     if (this.isSortLocally) {
       this.sortOnClient(fieldValue, orderValue)
     } else {
-      this.sortOnServer()
+      this.sortOnServer(fieldValue, orderValue)
     }
   }
 
