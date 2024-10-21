@@ -73,8 +73,10 @@ export default class SortableTable extends SortableTableV2 {
   }
 
   handleScroll = async () => {
-    if (this.isLoading) return
-    const windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom;
+    if (this.isLoading) { 
+      return 
+    }
+    const windowRelativeBottom = document.documentElement.getBoundingClientRect().bottom
     if (windowRelativeBottom > document.documentElement.clientHeight + 100) {
         return
     }
