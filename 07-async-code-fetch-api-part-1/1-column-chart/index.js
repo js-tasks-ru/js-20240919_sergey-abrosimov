@@ -11,13 +11,11 @@ export default class ColumnChart extends ColumnChartV1{
     }
 
     async getData(from, to) {
-        const url = new URL(`${BACKEND_URL}/${this.url}`)
+        const url = new URL(this.url, BACKEND_URL)
         url.searchParams.set('from', from)
         url.searchParams.set('to', to)
 
-        const data = await fetchJson(url)
-
-        return data
+        return await fetchJson(url)
     }
 
     async update(from, to) {
@@ -25,6 +23,8 @@ export default class ColumnChart extends ColumnChartV1{
         super.update(Object.values(data))
         if (Object.values(data).length > 0) {
             this.element.className = 'column-chart'
+        } else {
+            this.element,className = 'column-chart_loading'
         }
         return data
     }

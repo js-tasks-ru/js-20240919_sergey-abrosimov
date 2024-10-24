@@ -19,7 +19,7 @@ export default class SortableTable extends SortableTableV2 {
     this.end = this.chunckSize
     this.isSortLocally = isSortLocally
     this.render()
-    this.createListenerScroll()
+    super.createListeners(window, 'scroll', this.handleScroll)
   }
 
   async render() {
@@ -85,7 +85,11 @@ export default class SortableTable extends SortableTableV2 {
     this.end += this.chunckSize
 
     let data
-    data = await this.fetchData(this.id, this.order, this.start, this.end)
+    try {
+      data = await this.fetchData(this.id, this.order, this.start, this.end)
+    } catch (e) {
+      data = []
+    }
     if (data.length > 0) {
       this.data = data
       this.updateBodyElement()
@@ -115,9 +119,9 @@ export default class SortableTable extends SortableTableV2 {
 
   }
 
-  updateBodyElement(data = this.data) {
+  updateBodyElement() {
     const bodyElement = this.element.querySelector('.sortable-table__body')
-    bodyElement.innerHTML = this.createBodyTemplate(data)
+    bodyElement.innerHTML = this.createBodyTemplate(this.data)
   }
 
   destroy() {
