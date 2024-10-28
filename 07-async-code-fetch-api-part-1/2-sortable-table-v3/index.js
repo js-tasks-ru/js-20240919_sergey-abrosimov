@@ -24,7 +24,11 @@ export default class SortableTable extends SortableTableV2 {
 
   async render() {
     let data
-    data = await this.fetchData(this.id, this.order, 0, this.end)
+    try {
+      data = await this.fetchData(this.id, this.order, 0, this.end)
+    } catch (ex) {
+      data = []
+    }
     this.data = data
     this.updateBodyElement()
   }
