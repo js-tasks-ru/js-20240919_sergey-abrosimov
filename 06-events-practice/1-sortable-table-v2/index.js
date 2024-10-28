@@ -14,7 +14,7 @@ export default class SortableTable extends SortableTableV1{
     this.arrowElement = this.createArrowElement()
     this.isSortLocally = true
     
-    this.createListeners(this.subElements.header, "pointerdown", this.headerHandler)
+    this.createListeners()
 
     if (id) {
       this.defaultSorting(id, order)
@@ -60,8 +60,8 @@ export default class SortableTable extends SortableTableV1{
     this.selectedElement = currentElement
   }
 
-  createListeners(target, type, handler) {
-    target.addEventListener(type, handler)
+  createListeners() {
+    this.subElements.header.addEventListener("pointerdown", this.headerHandler)
   }
 
   destroyListeners() {

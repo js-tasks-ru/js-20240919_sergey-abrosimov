@@ -19,7 +19,7 @@ export default class SortableTable extends SortableTableV2 {
     this.end = this.chunckSize
     this.isSortLocally = isSortLocally
     this.render()
-    super.createListeners(window, 'scroll', this.handleScroll)
+    this.createListeners()
   }
 
   async render() {
@@ -64,11 +64,13 @@ export default class SortableTable extends SortableTableV2 {
     this.element.classList.remove("sortable-table_loading")
   }
 
-  createListenerScroll() {
+  createListeners() {
+    super.createListeners()
     window.addEventListener('scroll', this.handleScroll)
   }
 
-  removeListenerScroll() {
+  destroyListeners() {
+    super.destroyListeners()
     window.removeEventListener('scroll', this.handleScroll)
   }
 
@@ -126,6 +128,6 @@ export default class SortableTable extends SortableTableV2 {
 
   destroy() {
     super.destroy()
-    this.removeListenerScroll()
+    this.destroyListeners()
   }
 }
