@@ -54,7 +54,13 @@ export default class SortableTable {
     elementBody.innerHTML = `
     <div data-element="body" class="sortable-table__body"></div>
     `
+    htmlCode = this.createBodyTemplate(data)
+    elementBody.firstElementChild.innerHTML = htmlCode
+    return elementBody.firstElementChild
+  }
 
+  createBodyTemplate(data) {
+    let htmlCode = ``
     data.forEach(el => {
       htmlCode += `<a href="/products/${el.id}" class="sortable-table__row">`
       this.headerConfig.forEach(header => {
@@ -66,9 +72,7 @@ export default class SortableTable {
       })
       htmlCode += `</a>`
     })
-
-    elementBody.firstElementChild.innerHTML = htmlCode
-    return elementBody.firstElementChild
+    return htmlCode
   }
 
   sort(fieldValue, orderValue) {

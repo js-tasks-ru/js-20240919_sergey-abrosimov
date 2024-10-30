@@ -1,12 +1,32 @@
 export default class ColumnChart {
-    chartHeight = 50
 
-    constructor(obj) {
-        this.data = obj?.data
-        this.label = obj?.label
-        this.value = obj?.hasOwnProperty('formatHeading') ? obj.formatHeading(obj.value) : obj?.value
-        this.link = obj?.link 
+    chartHeight = 50
+    subElements = {}
+
+    constructor(props = {}) {
+        const {
+            data = [],
+            label = '',
+            value = 0,
+            link = '',
+            formatHeading = (value) => value,
+        } = props
+      
+        this.data = data
+        this.label = label
+        this.value = value
+        this.link = link
+        this.formatHeading = formatHeading
+        
         this.element = this.createElement()
+        this.selectSubElements()
+    }
+    
+    selectSubElements() {
+        const dataElements = this.element.querySelectorAll('[data-element]')
+        dataElements.forEach(item => {
+          this.subElements[item.dataset.element] = item
+        })
     }
 
     setLink() {
@@ -18,27 +38,33 @@ export default class ColumnChart {
 
     createElement() {
         const currentElement = document.createElement('div')
-        currentElement.innerHTML = `
+        currentElement.innerHTML = this.createElementTemplate()
+
+        const firstChild = currentElement.firstElementChild
+
+        if (this.data === undefined || this.data.length === 0) {
+            firstChild.classList.add('column-chart_loading')
+        }
+        return firstChild
+    }
+
+    createElementTemplate() {
+        return `
         <div class="column-chart" style="--chart-height: ${this.chartHeight}">
             <div class="column-chart__title">
                 ${this.label}
                 ${this.setLink()}
             </div>
             <div class="column-chart__container">
-                <div data-element="header" class="column-chart__header">${this.value}</div>
+                <div data-element="header" class="column-chart__header">${this.formatHeading(this.value)}</div>
                 <div data-element="body" class="column-chart__chart">
-                    ${this.setData()}
+                    ${this.createDataTemplate()}
                 </div>
             </div>
         </div>`
-        if (this.data === undefined || this.data.length === 0) {
-            const firstChild = currentElement.firstElementChild
-            firstChild.classList.add('column-chart_loading')
-        }
-        return currentElement.firstElementChild
     }
 
-    setData() {
+    createDataTemplate() {
         let resultData = ''
         if (this.data === undefined) return
         const max = Math.max(...this.data)
@@ -56,7 +82,11 @@ export default class ColumnChart {
 
     update(data) {
         this.data = data
-        this.element.innerHTML = this.createElement()
+        
+        this.value = data.reduce((a, b)=>a + b, 0);
+    
+        this.subElements.header.innerHTML = this.formatHeading(this.value);
+        this.subElements.body.innerHTML = this.createDataTemplate()
     }
 
     remove() {
